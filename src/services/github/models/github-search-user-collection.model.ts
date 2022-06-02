@@ -8,7 +8,8 @@ export class GithubSearchUserCollectionModel {
   ) { }
 
   static from(dto: GithubSearchUserCollectionDto): GithubSearchUserCollectionModel {
-    const items = dto.items.map(GithubSearchUserModel.from);
-    return new GithubSearchUserCollectionModel(items, dto.total_count);
+    const { userCount, nodes } = dto.data.search;
+    const items = nodes.map(GithubSearchUserModel.from);
+    return new GithubSearchUserCollectionModel(items, userCount);
   }
 }

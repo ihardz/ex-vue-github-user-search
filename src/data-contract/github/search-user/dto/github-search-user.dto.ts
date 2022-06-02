@@ -1,4 +1,10 @@
 export interface GithubSearchUserDto {
-  id: number,
-  login: string
+  id: string,
+  login: string,
+  name: string,
+  avatarUrl: string,
+  email: string,
+  bio: string,
+  location: string,
+  url: string
 }

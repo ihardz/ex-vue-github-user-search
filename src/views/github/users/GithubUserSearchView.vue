@@ -33,7 +33,7 @@ export default defineComponent({
     };
   },
   async mounted(): Promise<void> {
-    this.userCollection = await this.githubSearchUserService.searchUsers('ihard');
+    this.userCollection = await this.githubSearchUserService.searchUsers('ihard', 100);
     console.debug('[GithubUserSearchView.vue] userCollection', this.userCollection); 
   }
 });
