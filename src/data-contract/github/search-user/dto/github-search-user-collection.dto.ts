@@ -1,6 +1,16 @@
 import { GithubSearchUserDto } from ".";
 
 export interface GithubSearchUserCollectionDto {
-  items: GithubSearchUserDto[],
-  total_count: number,
+  data: {
+    search: {
+      pageInfo: {
+        startCursor: string,
+        endCursor: string,
+        hasPreviousPage: boolean,
+        hasNextPage: boolean
+      },
+      userCount: number,
+      nodes: GithubSearchUserDto[]
+    }
+  }
 }
