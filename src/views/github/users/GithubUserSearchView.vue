@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { GithubUserList } from '@/components';
+import { GithubUserList } from '@/components/github';
 
 export default defineComponent({
   components: {
