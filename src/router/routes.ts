@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from 'vue-router';
-import { GithubUserSearchView } from '@/views';
+import { GithubUserSearchView } from '@/views/github';
 
 export const ROUTES: Array<RouteRecordRaw> = [
   {
