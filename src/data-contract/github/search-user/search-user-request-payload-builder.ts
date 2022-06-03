@@ -2,7 +2,7 @@ import { StringHelper } from "@/helpers";
 
 export declare type SearchUserOptions = {
   term: string,
-  pageSize: number
+  graphQlSearchPageExpressionExtras: string
 };
 
 export class SearchUserRequestPayloadBuilder  {
@@ -10,12 +10,11 @@ export class SearchUserRequestPayloadBuilder  {
   public static buildGraphQLQuery(options: SearchUserOptions) {
     const usersQuery = this.buildUsersQuery(options);
     const variables = {
-      usersQuery,
-      pageSize: options.pageSize
+      usersQuery
     };
     const query = `
-    query SearchUsers($usersQuery: String!, $pageSize: Int!){
-      search(first: $pageSize, type:USER query: $usersQuery) {
+    query SearchUsers($usersQuery: String!){
+      search(${options.graphQlSearchPageExpressionExtras}, type:USER, query: $usersQuery) {
         pageInfo {
           startCursor      
           endCursor
