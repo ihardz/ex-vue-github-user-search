@@ -1,11 +1,13 @@
 
 
 <template>
-  <div class="github-user-search-view">
-    <GithubUserList :users="users" @search="handleSearch" :totalCount="totalCount"
-      :hasPreviousPage="hasPreviousPage" :hasNextPage="hasNextPage" :pageSizes="pageSizes"
-      @page="handlePage" />
-  </div>
+  <Card class="github-user-search-view max-w-28rem">
+    <template #content>
+      <GithubUserList :users="users" @search="handleSearch" :totalCount="totalCount"
+        :hasPreviousPage="hasPreviousPage" :hasNextPage="hasNextPage" :pageSizes="pageSizes"
+        @page="handlePage" />
+    </template>
+  </Card>
 </template>
 
 <script lang="ts">
@@ -96,3 +98,11 @@ export default defineComponent({
   }
 });
 </script>
+
+<style lang="scss" scoped>
+  .github-user-search-view {
+    :deep(.p-card-content) {
+      padding: 0;
+    }
+  }
+</style>
