@@ -5,33 +5,39 @@
       :first="paginatorFirst" :totalRecords="paginatorTotalRecords"
       :rows="pageSize"  @page="handlePage($event)">
 			<template #header>
-        <div class="flex">
+        <div class="flex justify-content-between align-items-center">
           <div>
             <DelayedInputText v-model="searchTerm" placeholder="Search GitHub" />
           </div>
-          <div>
+          <div class="text-right">
             <span>{{totalUsersFoundDisplay}}</span>
           </div>          
         </div>        
 			</template>
 
 			<template #list="{ data }">
-        <div class="w-full flex">
-          <div>
-            <Avatar :image="data.avatarUrl"  class="mr-2" shape="circle" />
+        <div class="w-full flex p-2">
+          <div class="flex flex-column">
+            <Avatar :image="data.avatarUrl" class="mx-2" shape="circle" />
           </div>
-          <div>
-            <div>{{data.name}}</div>
-            <div>{{data.login}}</div>
-            <div>{{data.bio}}</div>
-            <div>{{data.location}}</div>
-          </div>
-				</div>    
+          <div class="flex-grow-1">
+            <div class="mb-2 flex align-items-center">
+              <div class="mr-4">{{data.name}}</div>
+              <div class="font-semibold flex-grow-1">{{data.login}}</div>
+              <div class="ml-4"><Button icon="pi pi-github" class="p-button-rounded p-button-secondary p-button-text w-2rem h-2rem" @click="handleOpenUrl(data.url)"/></div>
+            </div>
+            <div class="mb-2 text-sm">{{data.bio}}</div>
+            <div class="text-xs flex">
+              <div class="text-500 mr-3">{{data.location}}</div>
+              <a v-if="data.email" class="no-underline text-500 hover:text-blue-700" :href="formatEmailHref(data.email)">{{data.email}}</a>
+            </div>
+          </div>          
+				</div>        
 			</template>
 
       <template #empty>
-        <div>
-          Empty
+        <div class="flex justify-content-center align-items-center h-10rem text-6xl">          
+          <i class="pi pi-github text-6xl text-200"></i>
         </div>        
       </template>
 		</DataView>
@@ -115,6 +121,12 @@ export default defineComponent({
       }
       console.log('handlePage > event', event);
       this.$emit(EVENT_PAGE, event);
+    },
+    formatEmailHref(email: string){
+      return `mailto:${email}`;
+    },
+    handleOpenUrl(url: string): void {
+      window.open(url, '_blank');
     },
     _initSearch(term?: string): void {
       const event: GithubUserListSearchEvent = {
