@@ -37,9 +37,9 @@ export default defineComponent({
       return this.userCollection?.items;
     }
   },
-  async mounted(): Promise<void> {
-    this.userCollection = await this.githubSearchUserService.searchUsers('ihard', 100);
-    console.debug('[GithubUserSearchView.vue] userCollection', this.userCollection); 
-  }
+  // async mounted(): Promise<void> {
+  //   this.userCollection = await this.githubSearchUserService.searchUsers('ihard', 100);
+  //   console.debug('[GithubUserSearchView.vue] userCollection', this.userCollection); 
+  // }
 });
 </script>
