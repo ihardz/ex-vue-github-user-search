@@ -1,5 +1,5 @@
-import { GithubSearchUserCollectionModel } from "..";
+import { GithubSearchUserCollectionModel, GithubUserSearchPaginationOptionsAbstract } from "..";
 
 export interface GithubUserSearchServiceInterface {
-  searchUsers: (term: string, pageSize: number) => Promise<GithubSearchUserCollectionModel>
+  searchUsers: (term: string, pageOptions: GithubUserSearchPaginationOptionsAbstract) => Promise<GithubSearchUserCollectionModel>
 }

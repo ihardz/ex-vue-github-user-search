@@ -41,8 +41,11 @@
 <script lang="ts">
 import { GithubSearchUserModel } from '@/services/github';
 import { defineComponent, PropType } from 'vue';
+import { GithubUserListSearchEvent, GithubUserListSearchPageEvent } from './events';
 
 const EVENT_SEARCH = 'search';
+const EVENT_PAGE = 'page';
+const DEFAULTS_PAGE_SIZE = 10;
 
 declare type InternalPaginatorState = {
   first: number,
@@ -50,27 +53,29 @@ declare type InternalPaginatorState = {
 }
 
 export default defineComponent({
-  emits: [EVENT_SEARCH],
+  emits: [EVENT_SEARCH, EVENT_PAGE],
   props: {
     users: Array as PropType<GithubSearchUserModel[]>,
     totalCount: Number,
-    pageSize: {
-      type: Number,
-      default: 10
+    pageSizes: {
+      type: Array as PropType<number[]>,
+      default: () => [DEFAULTS_PAGE_SIZE]
     },
     hasNextPage: Boolean,
     hasPreviousPage: Boolean
   },
   data(): {
     searchTerm?: string,
-    internalPaginatorState: InternalPaginatorState
+    internalPaginatorState: InternalPaginatorState,
+    pageSize: number
   } {
     return {
       searchTerm: undefined,
       internalPaginatorState: {
         first: 0,
         totalRecords: 0
-      }
+      },
+      pageSize: this.pageSizes[0] || DEFAULTS_PAGE_SIZE
     }
   },
   computed: {
@@ -86,9 +91,7 @@ export default defineComponent({
       }
     },
     paginatorFirst(): number {
-      console.log('paginatorFirst()',  this.internalPaginatorState);
       return this.internalPaginatorState.first;
-      
     },
     paginatorTotalRecords(): number {
       return this.internalPaginatorState.totalRecords;
@@ -96,24 +99,34 @@ export default defineComponent({
   },
   watch: {
     searchTerm(newVal?: string, oldVal?: string): void {
-      (newVal !== oldVal) && this.initSearch(newVal);
+      (newVal !== oldVal) && this._initSearch(newVal);
     },
     users(): void {
-      console.log('here');
       this._syncInternalPaginatorState();
     }
   },
-  methods: {
-    initSearch(term?: string): void {
-      this.$emit(EVENT_SEARCH, term);
+  methods: {    
+    handlePage({ first }: { first: number }): void {
+      const isNext = this.internalPaginatorState.first < first;
+      const event: GithubUserListSearchPageEvent = {
+        term: this.searchTerm,        
+        pageSize: this.pageSize,
+        isNext
+      }
+      console.log('handlePage > event', event);
+      this.$emit(EVENT_PAGE, event);
     },
-    handlePage({page}: {page: number}): void {
-      console.log(arguments);
+    _initSearch(term?: string): void {
+      const event: GithubUserListSearchEvent = {
+        term,
+        pageSize: this.pageSize
+      };
+      this.$emit(EVENT_SEARCH, event);
     },
-    _syncInternalPaginatorState(canNavigatePrevious = true, canNavigateNext = true): void {
-      const first = (canNavigatePrevious && this.hasPreviousPage) ? this.pageSize + 1 : 0;
+    _syncInternalPaginatorState(): void {
+      const first = this.hasPreviousPage ? this.pageSize : 0;
       const countBeforeNextPageFirst = first + this.pageSize;
-      const totalRecords = (canNavigateNext && this.hasNextPage) ? (countBeforeNextPageFirst) : (countBeforeNextPageFirst - 1);
+      const totalRecords = this.hasNextPage ? (countBeforeNextPageFirst + 1) : (countBeforeNextPageFirst);
       console.log('_syncInternalPaginatorState',  { first, totalRecords });
       this.internalPaginatorState = { first, totalRecords };
     }

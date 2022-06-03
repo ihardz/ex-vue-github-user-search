@@ -9,7 +9,7 @@ export class GithubSearchUserModel {
     public email: string,
     public bio: string,
     public location: string,
-    public url: string
+    public url: string,
   ) { }
 
   static from(dto: GithubSearchUserDto): GithubSearchUserModel {
