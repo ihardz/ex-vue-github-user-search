@@ -2,7 +2,7 @@
 
 <template>
   <div class="github-user-search-view">
-    <GithubUserList />
+    <GithubUserList :users="users" />
   </div>
 </template>
 
@@ -10,7 +10,7 @@
 import { defineComponent, inject } from 'vue';
 import { GithubUserList } from '@/components/github';
 import { SYMBOL_GITHUB_USER_SEARCH_SERVICE } from '@/dependency-injection';
-import { GithubSearchUserCollectionModel } from '@/services/github';
+import { GithubSearchUserCollectionModel, GithubSearchUserModel } from '@/services/github';
 
 export default defineComponent({
   setup() {   
@@ -31,6 +31,11 @@ export default defineComponent({
     return {
       userCollection: undefined
     };
+  },
+  computed: {
+    users(): GithubSearchUserModel[] | undefined {
+      return this.userCollection?.items;
+    }
   },
   async mounted(): Promise<void> {
     this.userCollection = await this.githubSearchUserService.searchUsers('ihard', 100);
