@@ -2,7 +2,7 @@
 
 <template>
   <div class="github-user-search-view">
-    <GithubUserList :users="users" @search="handleSearch"/>
+    <GithubUserList :users="users" @search="handleSearch" :totalCount="totalCount" :hasPreviousPage="true"/>
   </div>
 </template>
 
@@ -37,6 +37,9 @@ export default defineComponent({
   computed: {
     users(): GithubSearchUserModel[] | undefined {
       return this.userCollection?.items;
+    },
+    totalCount(): number | undefined {
+      return this.userCollection?.totalCount;
     }
   },
   methods: {
