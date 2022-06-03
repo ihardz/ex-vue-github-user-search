@@ -23,6 +23,8 @@ jobs:
         cache: 'npm'
     - name: 🚚 Install dependencies
       run: npm ci
+    - name: Replace Token
+      run: sed -e "s/\${GITHUB_TOKEN}/${{ secrets.GITHUB_TOKEN }}/" .env
     - name: ⭐ Build project
       run: npm run build --if-present
     - name: 📂 Sync files
