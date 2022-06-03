@@ -29,7 +29,10 @@
             <div class="mb-2 text-sm">{{data.bio}}</div>
             <div class="text-xs flex">
               <div class="text-500 mr-3">{{data.location}}</div>
-              <a v-if="data.email" class="no-underline text-500 hover:text-blue-700" :href="formatEmailHref(data.email)">{{data.email}}</a>
+              <a v-if="data.email" class="no-underline text-500 hover:text-blue-700 mr-3" :href="formatEmailHref(data.email)">{{data.email}}</a>
+              <div class="flex-grow-1 text-right">
+                <i class="pi pi-users mr-1 text-500"></i><span class="text-500">{{data.followersCount}}</span>
+              </div>              
             </div>
           </div>          
 				</div>        

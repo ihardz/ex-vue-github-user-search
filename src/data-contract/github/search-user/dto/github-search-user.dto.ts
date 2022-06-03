@@ -6,5 +6,8 @@ export interface GithubSearchUserDto {
   email: string,
   bio: string,
   location: string,
-  url: string
+  url: string,
+  followers: {
+    totalCount: number
+  }
 }

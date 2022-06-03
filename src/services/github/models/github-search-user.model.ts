@@ -10,6 +10,7 @@ export class GithubSearchUserModel {
     public bio: string,
     public location: string,
     public url: string,
+    public followersCount: number
   ) { }
 
   static from(dto: GithubSearchUserDto): GithubSearchUserModel {
@@ -21,7 +22,8 @@ export class GithubSearchUserModel {
       dto.email,
       dto.bio,
       dto.location,
-      dto.url
+      dto.url,
+      dto.followers.totalCount
     );
   }
 }
