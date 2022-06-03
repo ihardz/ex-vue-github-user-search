@@ -1,7 +1,7 @@
 
 
 <template>
-  <Card class="github-user-search-view max-w-28rem">
+  <Card class="github-user-search-view">
     <template #content>
       <GithubUserList :users="users" @search="handleSearch" :totalCount="totalCount"
         :hasPreviousPage="hasPreviousPage" :hasNextPage="hasNextPage" :pageSizes="pageSizes"
