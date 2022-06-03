@@ -2,7 +2,7 @@
 
 <template>
   <div class="github-user-search-view">
-    <GithubUserList :users="users" />
+    <GithubUserList :users="users" @search="handleSearch"/>
   </div>
 </template>
 
@@ -26,10 +26,12 @@ export default defineComponent({
     GithubUserList
   },
   data(): {
-    userCollection?: GithubSearchUserCollectionModel
+    userCollection?: GithubSearchUserCollectionModel,
+    loading: boolean
   } {
     return {
-      userCollection: undefined
+      userCollection: undefined,
+      loading: false
     };
   },
   computed: {
@@ -37,9 +39,17 @@ export default defineComponent({
       return this.userCollection?.items;
     }
   },
-  async mounted(): Promise<void> {
-    this.userCollection = await this.githubSearchUserService.searchUsers('ihard', 100);
-    console.debug('[GithubUserSearchView.vue] userCollection', this.userCollection); 
+  methods: {
+    async handleSearch(term?: string): Promise<void> {
+      this._resetSearchResults;
+      if(!term) return;
+      this.loading = true;
+      this.userCollection = await this.githubSearchUserService.searchUsers(term, 100);
+      this.loading = false;
+    },
+    _resetSearchResults(): void {
+      this.userCollection = undefined;
+    }
   }
 });
 </script>

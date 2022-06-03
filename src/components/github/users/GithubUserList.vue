@@ -2,7 +2,7 @@
   <div class="github-user-list-component">
     <DataView :value="users">
 			<template #header>
-        <InputText v-model="searchTerm" placeholder="Search GitHub" />
+        <DelayedInputText v-model="searchTerm" placeholder="Search GitHub" />
 			</template>
 
 			<template #list="{ data }">
@@ -18,16 +18,24 @@
           </div>
 				</div>    
 			</template>
+
+      <template #empty>
+        <div>
+          Empty
+        </div>        
+      </template>
 		</DataView>
   </div>
 </template>
-
 
 <script lang="ts">
 import { GithubSearchUserModel } from '@/services/github';
 import { defineComponent, PropType } from 'vue';
 
+const EVENT_SEARCH = 'search';
+
 export default defineComponent({
+  emits: [EVENT_SEARCH],
   props: {
     users: Array as PropType<GithubSearchUserModel[]>
   },
@@ -36,6 +44,16 @@ export default defineComponent({
   } {
     return {
       searchTerm: undefined,
+    }
+  },
+  watch: {
+    searchTerm(newVal?: string, oldVal?: string): void {
+      (newVal !== oldVal) && this.initSearch(newVal);
+    },
+  },
+  methods: {
+    initSearch(term?: string): void {
+      this.$emit(EVENT_SEARCH, term);
     }
   }
 });
