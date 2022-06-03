@@ -1,3 +1,13 @@
+enum RETRIEVER {
+  FIRST = 'first',
+  LAST = 'last'
+}
+
+enum CURSOR {
+  AFTER ='after',
+  BEFORE= 'before'
+}
+
 export abstract class GithubUserSearchPaginationOptionsAbstract {
   abstract readonly retrieverVariant: string;
   protected constructor(
@@ -10,7 +20,7 @@ export abstract class GithubUserSearchPaginationOptionsAbstract {
 }
 
 export class GithubUserSearchPaginationOptions extends GithubUserSearchPaginationOptionsAbstract {
-  readonly retrieverVariant = 'first';
+  readonly retrieverVariant = RETRIEVER.FIRST;
   constructor(pageSize: number) { 
     super(pageSize)
   }
@@ -33,8 +43,8 @@ export abstract class GithubUserSearchPaginationCursorOptionsAbstract extends Gi
 }
 
 export class GithubUserSearchNextPageOptions extends GithubUserSearchPaginationCursorOptionsAbstract {
-  override readonly retrieverVariant = 'first';
-  override readonly cursorName = 'after';
+  override readonly retrieverVariant = RETRIEVER.FIRST;
+  override readonly cursorName = CURSOR.AFTER;
   constructor(
     pageSize: number,
     after: string
@@ -44,16 +54,12 @@ export class GithubUserSearchNextPageOptions extends GithubUserSearchPaginationC
 }
 
 export class GithubUserSearchPreviousPageOptions extends GithubUserSearchPaginationCursorOptionsAbstract {
-  override readonly retrieverVariant = 'last';
-  override readonly cursorName = 'before';
+  override readonly retrieverVariant = RETRIEVER.LAST;
+  override readonly cursorName = CURSOR.BEFORE;
   constructor(
     pageSize: number,
     before: string
   ) {
     super(pageSize, before);
-  }
-
-  override toGraphQlSearchExpression(): string {
-    return `last: ${this.pageSize}, before: "${this.cursor}"`;
   }
 }
